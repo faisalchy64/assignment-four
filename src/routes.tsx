@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router";
-import Counter from "./components/Counter";
+import Main from "./layouts/Main";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Counter />,
+    path: "",
+    element: <Main />,
+    children: [],
   },
   {
     path: "*",
