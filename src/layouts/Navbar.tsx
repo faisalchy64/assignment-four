@@ -21,7 +21,7 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-2.5 text-xs">
           <Link to="/books">All Books</Link>
-          <Link to="/add-book">Add Book</Link>
+          <Link to="/create-book">Add Book</Link>
           <Link to="/borrow-summary">Borrow Summary</Link>
 
           <ModeToggle />
@@ -44,7 +44,7 @@ export default function Navbar() {
                 <Link to="/books">All Books</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link to="/add-book">Add Book</Link>
+                <Link to="/create-book">Add Book</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link to="/borrow-summary">Borrow Summary</Link>
