@@ -10,6 +10,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function BookItem() {
   return (
@@ -33,15 +44,42 @@ export default function BookItem() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to="/books/1">View</Link>
+              <Link to="/books/1" className="w-full">
+                View
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to="/edit-book/1">Edit</Link>
+              <Link to="/edit-book/1" className="w-full">
+                Edit
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to="/borrow/1">Borrow</Link>
+              <Link to="/borrow/1" className="w-full">
+                Borrow
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <AlertDialog>
+                <AlertDialogTrigger className="w-full text-start">
+                  Delete
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your book and remove your book data from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </TableCell>
