@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import Main from "./layouts/Main";
 import Books from "./pages/Books";
 import CreateBook from "./pages/CreateBook";
+import UpdateBook from "./pages/UpdateBook";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "/create-book",
         element: <CreateBook />,
+      },
+      {
+        path: "/edit-book/:id",
+        element: <UpdateBook />,
       },
     ],
   },
