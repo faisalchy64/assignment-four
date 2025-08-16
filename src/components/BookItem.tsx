@@ -21,16 +21,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import type { IBook } from "@/types";
 
-export default function BookItem() {
+export default function BookItem({ book }: { book: IBook }) {
   return (
     <TableRow>
-      <TableCell>The Theory of Everything</TableCell>
-      <TableCell>Stephen Hawking</TableCell>
-      <TableCell>SCIENCE</TableCell>
-      <TableCell>9780553380163</TableCell>
-      <TableCell>2</TableCell>
-      <TableCell>True</TableCell>
+      <TableCell>{book.title}</TableCell>
+      <TableCell>{book.author}</TableCell>
+      <TableCell>{book.genre}</TableCell>
+      <TableCell>{book.isbn}</TableCell>
+      <TableCell>{book.copies}</TableCell>
+      <TableCell>{book.available ? "Available" : "Unavailable"}</TableCell>
       <TableCell>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -44,17 +45,17 @@ export default function BookItem() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to="/books/1" className="w-full">
+              <Link to={`/books/${book._id}`} className="w-full">
                 View
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to="/edit-book/1" className="w-full">
+              <Link to={`/edit-book/${book._id}`} className="w-full">
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to="/borrow/1" className="w-full">
+              <Link to={`/borrow/${book._id}`} className="w-full">
                 Borrow
               </Link>
             </DropdownMenuItem>
