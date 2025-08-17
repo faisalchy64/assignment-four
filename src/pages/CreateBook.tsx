@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +20,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useCreateBookMutation } from "@/redux/features/api/apiSlice";
+import type { Genre } from "@/types";
+import { useNavigate } from "react-router";
 
 export default function CreateBook() {
   const formSchema = z.object({
@@ -52,8 +56,23 @@ export default function CreateBook() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  const navigate = useNavigate();
+  const [createBook, { isLoading }] = useCreateBookMutation();
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const res = await createBook({
+      ...data,
+      available: data.copies > 0 ? true : false,
+      genre: data.genre as Genre,
+    });
+
+    if (res.error) {
+      toast.error("Something went wrong.");
+      form.reset();
+    } else {
+      toast.success(res.data?.message);
+      navigate("/");
+    }
   }
 
   return (
@@ -181,7 +200,9 @@ export default function CreateBook() {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Submitting..." : "Submit"}
+          </Button>
         </form>
       </Form>
     </main>

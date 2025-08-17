@@ -1,4 +1,4 @@
-type Genre =
+export type Genre =
   | "FICTION"
   | "NON_FICTION"
   | "SCIENCE"
@@ -14,5 +14,5 @@ export interface IBook {
   isbn: string;
   description: string;
   copies: number;
-  available: boolean;
+  available?: boolean;
 }
