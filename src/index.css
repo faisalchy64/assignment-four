@@ -124,4 +124,7 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .main {
+    @apply w-4/5 min-h-[calc(100vh-64.8px)] py-10 mx-auto;
+  }
 }

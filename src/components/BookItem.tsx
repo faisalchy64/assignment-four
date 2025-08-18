@@ -25,9 +25,22 @@ import {
 import type { IBook } from "@/types";
 import type { AppDispatch } from "@/redux/app/store";
 import { update } from "@/redux/features/book/bookSlice";
+import { useDeleteBookMutation } from "@/redux/features/api/apiSlice";
+import { toast } from "sonner";
 
 export default function BookItem({ book }: { book: IBook }) {
   const dispatch = useDispatch<AppDispatch>();
+  const [deleteBook, { isLoading }] = useDeleteBookMutation();
+
+  const handleDelete = async () => {
+    const res = await deleteBook(book._id);
+
+    if (res.error) {
+      toast.error("Something went wrong.");
+    } else {
+      toast.success(res.data?.message);
+    }
+  };
 
   return (
     <TableRow>
@@ -70,7 +83,10 @@ export default function BookItem({ book }: { book: IBook }) {
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <AlertDialog>
-                <AlertDialogTrigger className="w-full text-start">
+                <AlertDialogTrigger
+                  className="w-full text-start"
+                  disabled={isLoading}
+                >
                   Delete
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -85,7 +101,9 @@ export default function BookItem({ book }: { book: IBook }) {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={handleDelete}>
+                      Continue
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

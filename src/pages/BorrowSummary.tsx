@@ -10,7 +10,7 @@ import {
 
 export default function BorrowSummary() {
   return (
-    <main className="w-4/5 mx-auto">
+    <main className="main">
       <h3 className="text-2xl">Books Borrow Summary</h3>
 
       <div className="border rounded-md my-2.5">

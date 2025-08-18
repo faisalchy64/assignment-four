@@ -76,7 +76,7 @@ export default function CreateBook() {
   }
 
   return (
-    <main className="w-4/5 mx-auto py-10">
+    <main className="main">
       <h3 className="text-2xl">Create New Book</h3>
 
       <Form {...form}>

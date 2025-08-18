@@ -87,7 +87,7 @@ export default function UpdateBook() {
   }
 
   return (
-    <main className="w-4/5 mx-auto py-10">
+    <main className="main">
       <h3 className="text-2xl">Update Book's Details</h3>
 
       <Form {...form}>

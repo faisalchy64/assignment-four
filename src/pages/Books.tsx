@@ -15,7 +15,7 @@ export default function Books() {
   const { isLoading, data: books, isError } = useGetBooksQuery(null);
 
   return (
-    <main className="w-4/5 py-10 mx-auto">
+    <main className="main">
       <div className="flex justify-between items-center">
         <h3 className="text-2xl">All Books</h3>
         <Link to="/create-book">

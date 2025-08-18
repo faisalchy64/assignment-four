@@ -7,7 +7,7 @@ export default function Book() {
   const { isLoading, data: book, isError } = useGetBookQuery(id ?? "");
 
   return (
-    <main className="w-4/5 py-10 mx-auto">
+    <main className="main">
       {isLoading && (
         <p className="text-sm text-green-500 my-2.5">
           Book data is being fetched…
