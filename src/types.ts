@@ -4,7 +4,8 @@ export type Genre =
   | "SCIENCE"
   | "HISTORY"
   | "BIOGRAPHY"
-  | "FANTASY";
+  | "FANTASY"
+  | "";
 
 export interface IBook {
   _id: string;
@@ -15,4 +16,6 @@ export interface IBook {
   description: string;
   copies: number;
   available?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }

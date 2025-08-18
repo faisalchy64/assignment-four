@@ -19,6 +19,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/app/store";
+import type { IBook } from "@/types";
+import { useUpdateBookMutation } from "@/redux/features/api/apiSlice";
+import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 
 export default function UpdateBook() {
   const formSchema = z.object({
@@ -37,23 +43,47 @@ export default function UpdateBook() {
     description: z.string().min(3, {
       error: "The description should contain at least 3 characters.",
     }),
-    copies: z.number({ error: "The copies should be a positive number." }),
+    copies: z
+      .number({ error: "The copies should be a positive number." })
+      .gte(0, { error: "The copies should be greater than or equal to 0." }),
   });
+
+  const { book }: { book: IBook | null } = useSelector(
+    (state: RootState) => state.book
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      author: "",
-      genre: "",
-      isbn: "",
-      description: "",
-      copies: 0,
+      title: book?.title ?? "",
+      author: book?.author ?? "",
+      genre: book?.genre ?? "",
+      isbn: book?.isbn ?? "",
+      description: book?.description ?? "",
+      copies: book?.copies ?? 0,
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  const { id = "" } = useParams();
+  const navigate = useNavigate();
+  const [updateBook, { isLoading }] = useUpdateBookMutation();
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const res = await updateBook({
+      _id: id,
+      data: {
+        ...data,
+        genre: data.genre as IBook["genre"],
+      },
+    });
+
+    if (res.error) {
+      toast.error("Something went wrong.");
+      form.reset();
+    } else {
+      toast.success(res.data.message);
+      navigate("/");
+    }
   }
 
   return (
@@ -173,7 +203,13 @@ export default function UpdateBook() {
                     type="text"
                     placeholder="Enter book copies"
                     {...field}
-                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      field.onChange(
+                        isNaN(parseInt(e.target.value))
+                          ? 0
+                          : parseInt(e.target.value)
+                      )
+                    }
                   />
                 </FormControl>
                 <FormMessage />
@@ -181,7 +217,9 @@ export default function UpdateBook() {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Submitting..." : "Submit"}
+          </Button>
         </form>
       </Form>
     </main>

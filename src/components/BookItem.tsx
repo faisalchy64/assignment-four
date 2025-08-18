@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import { Link } from "react-router";
 import { Menu } from "lucide-react";
 import { TableRow, TableCell } from "@/components/ui/table";
@@ -22,8 +23,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import type { IBook } from "@/types";
+import type { AppDispatch } from "@/redux/app/store";
+import { update } from "@/redux/features/book/bookSlice";
 
 export default function BookItem({ book }: { book: IBook }) {
+  const dispatch = useDispatch<AppDispatch>();
+
   return (
     <TableRow>
       <TableCell>{book.title}</TableCell>
@@ -50,7 +55,11 @@ export default function BookItem({ book }: { book: IBook }) {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to={`/edit-book/${book._id}`} className="w-full">
+              <Link
+                to={`/edit-book/${book._id}`}
+                className="w-full"
+                onClick={() => dispatch(update(book))}
+              >
                 Edit
               </Link>
             </DropdownMenuItem>
