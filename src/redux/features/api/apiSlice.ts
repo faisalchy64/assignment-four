@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { IBook } from "@/types";
+import type { IBook, IBorrow } from "@/types";
 
 const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/api",
   }),
-  tagTypes: ["Books"],
+  tagTypes: ["Books", "Borrows"],
   endpoints: (builder) => ({
     getBooks: builder.query<
       { success: boolean; message: string; data: IBook[] },
@@ -56,6 +56,31 @@ const apiSlice = createApi({
       query: (_id) => ({ url: `/books/${_id}`, method: "DELETE" }),
       invalidatesTags: ["Books"],
     }),
+    createBorrow: builder.mutation<
+      {
+        success: boolean;
+        message: string;
+        data: IBorrow;
+      },
+      Omit<IBorrow, "_id" | "createdAt" | "updatedAt">
+    >({
+      query: (data) => ({ url: "borrow", method: "POST", body: data }),
+      invalidatesTags: ["Borrows"],
+    }),
+    getBorrowBooks: builder.query<
+      {
+        success: boolean;
+        message: string;
+        data: {
+          book: { title: string; isbn: string };
+          totalQuantity: number;
+        }[];
+      },
+      null
+    >({
+      query: () => "/borrow",
+      providesTags: ["Borrows"],
+    }),
   }),
 });
 
@@ -66,4 +91,6 @@ export const {
   useCreateBookMutation,
   useUpdateBookMutation,
   useDeleteBookMutation,
+  useCreateBorrowMutation,
+  useGetBorrowBooksQuery,
 } = apiSlice;

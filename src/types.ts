@@ -19,3 +19,12 @@ export interface IBook {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IBorrow {
+  _id: string;
+  book: string;
+  quantity: number;
+  dueDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}

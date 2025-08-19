@@ -20,12 +20,25 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
+import { useNavigate, useParams } from "react-router";
+import {
+  useCreateBorrowMutation,
+  useGetBookQuery,
+} from "@/redux/features/api/apiSlice";
+import { toast } from "sonner";
 
 export default function CreateBorrow() {
+  const { bookId } = useParams();
+  const { data: book } = useGetBookQuery(bookId ?? "");
+  const [createBorrow, { isLoading }] = useCreateBorrowMutation();
+
   const formSchema = z.object({
     quantity: z
       .number({ error: "The quantity should be a positive number." })
-      .gt(1, { error: "The quantity must be greater than 0." }),
+      .gt(0, { error: "The quantity must be greater than 0." })
+      .lte(book?.data.copies ?? 1, {
+        error: `The quantity must be less than or equal to ${book?.data.copies}.`,
+      }),
     dueDate: z.date({ error: "Due date is required." }),
   });
 
@@ -36,8 +49,18 @@ export default function CreateBorrow() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  const navigate = useNavigate();
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const res = await createBorrow({ ...data, book: bookId ?? "" });
+
+    if (res.error) {
+      toast.error("Something went wrong.");
+      form.reset();
+    } else {
+      toast.success(res.data?.message);
+      navigate("/borrow-summary");
+    }
   }
 
   return (
@@ -60,7 +83,13 @@ export default function CreateBorrow() {
                     type="text"
                     placeholder="Enter book quantity"
                     {...field}
-                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      field.onChange(
+                        isNaN(parseInt(e.target.value))
+                          ? 0
+                          : parseInt(e.target.value)
+                      )
+                    }
                   />
                 </FormControl>
                 <FormMessage />
@@ -109,7 +138,9 @@ export default function CreateBorrow() {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Submitting..." : "Submit"}
+          </Button>
         </form>
       </Form>
     </main>

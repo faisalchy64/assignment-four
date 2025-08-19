@@ -192,7 +192,13 @@ export default function CreateBook() {
                     type="text"
                     placeholder="Enter book copies"
                     {...field}
-                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      field.onChange(
+                        isNaN(parseInt(e.target.value))
+                          ? 0
+                          : parseInt(e.target.value)
+                      )
+                    }
                   />
                 </FormControl>
                 <FormMessage />
