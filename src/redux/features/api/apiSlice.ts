@@ -4,7 +4,7 @@ import type { IBook, IBorrow } from "@/types";
 const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api",
+    baseUrl: "https://assignment-three-rust.vercel.app/api",
   }),
   tagTypes: ["Books", "Borrows"],
   endpoints: (builder) => ({
